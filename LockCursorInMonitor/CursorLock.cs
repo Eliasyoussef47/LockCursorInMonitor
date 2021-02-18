@@ -9,19 +9,6 @@ namespace LockCursorInMonitor
 {
     static class CursorLock
     {
-
-        private static int traceCounter = 0;
-        public static int TraceCounter 
-        {
-            get
-            {
-                traceCounter++;
-                return traceCounter;
-            }
-        }
-
-
-        //TODO: Bug: if you press ctrl and then press the title bar of a window the cursor clipt resets
         [StructLayout(LayoutKind.Sequential)]
         internal struct Win32Point
         {
@@ -48,7 +35,6 @@ namespace LockCursorInMonitor
             get => locked;
             set 
             {
-                Trace.WriteLine(CursorLock.TraceCounter + ") Locked: " + value);
                 locked = value; 
             } 
         }
@@ -56,7 +42,6 @@ namespace LockCursorInMonitor
 
         public static void LockCursor()
         {
-            Trace.WriteLine(CursorLock.TraceCounter + ") LockCursor");
             System.Drawing.Point MousePoint = GetMousePosition();
             RECT bounds = Screen.GetWorkingArea(MousePoint);
             ClipCursor(bounds);
@@ -65,7 +50,6 @@ namespace LockCursorInMonitor
 
         public static void UnlockCursor()
         {
-            Trace.WriteLine(CursorLock.TraceCounter + ") UnlockCursor");
             ClipCursor(null);
             Locked = false;
         }

@@ -44,27 +44,8 @@ namespace LockCursorInMonitor
 
         private void GlobalHookDragStarted(object sender, MouseEventExtArgs e)
         {
-            Trace.WriteLine(CursorLock.TraceCounter + ") DragStarted");
-            //foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(e))
-            //{
-            //    string name = descriptor.Name;
-            //    object value = descriptor.GetValue(e);
-            //    Trace.WriteLine($"{name}={value}");
-            //}
             CursorLock.Locked = false;
         }
-
-        //private void GlobalHookMouseUp(object sender, MouseEventExtArgs e)
-        //{
-        //    Trace.WriteLine("MouseUp");
-        //    foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(e))
-        //    {
-        //        string name = descriptor.Name;
-        //        object value = descriptor.GetValue(e);
-        //        Trace.WriteLine($"{name}={value}");
-        //    }
-        //    CursorLock.UnlockCursor();
-        //}
 
         private void ActivatedSwitch_Toggled(object sender, RoutedEventArgs e)
         {
@@ -76,12 +57,12 @@ namespace LockCursorInMonitor
                 m_GlobalHook.KeyDown += GlobalHookKeyDown;
                 m_GlobalHook.KeyUp += GlobalHookKeyUp;
                 m_GlobalHook.MouseDragStartedExt += GlobalHookDragStarted;
-                //m_GlobalHook.MouseUpExt += GlobalHookMouseUp;
             }
             else
             {
                 m_GlobalHook.KeyDown -= GlobalHookKeyDown;
                 m_GlobalHook.KeyUp -= GlobalHookKeyUp;
+                m_GlobalHook.MouseDragStartedExt -= GlobalHookDragStarted;
 
                 m_GlobalHook.Dispose();
             }
