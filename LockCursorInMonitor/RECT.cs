@@ -70,6 +70,14 @@ namespace LockCursorInMonitor
             Right = (int)rect.Right;
             Bottom = (int)rect.Bottom;
         }
+
+        public RECT()
+        {
+            Left = 0;
+            Top = 0;
+            Right = 0;
+            Bottom = 0;
+        }
         #endregion
     }
 }

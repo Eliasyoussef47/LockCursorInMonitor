@@ -2,6 +2,9 @@
 using System.Windows;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
+using System.ComponentModel;
+using System;
 
 namespace LockCursorInMonitor
 {
@@ -10,23 +13,6 @@ namespace LockCursorInMonitor
     /// </summary>
     public partial class MainWindow : Window
     {
-        //TODO: Bug: if you press ctrl and then press the title bar of a window the cursor clipt resets
-        [StructLayout(LayoutKind.Sequential)]
-        internal struct Win32Point
-        {
-            public int X;
-            public int Y;
-        };
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool GetCursorPos(ref Win32Point pt);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
-        static extern bool ClipCursor(RECT rcClip);
-
-        public bool Locked = false;
-
         private IKeyboardMouseEvents m_GlobalHook;
 
         public MainWindow()
@@ -38,12 +24,9 @@ namespace LockCursorInMonitor
         {
             if (e.KeyCode == Keys.LControlKey || e.KeyCode == Keys.RControlKey)
             {
-                if (!Locked)
+                if (!CursorLock.Locked)
                 {
-                    System.Drawing.Point MousePoint = GetMousePosition();
-                    RECT bounds = Screen.GetWorkingArea(MousePoint);
-                    ClipCursor(bounds);
-                    Locked = true;
+                    CursorLock.LockCursor();
                 }
             }
         }
@@ -52,21 +35,36 @@ namespace LockCursorInMonitor
         {
             if (e.KeyCode == Keys.LControlKey || e.KeyCode == Keys.RControlKey)
             {
-                if (Locked)
+                if (CursorLock.Locked)
                 {
-                    ClipCursor(null);
-                    Locked = false;
+                    CursorLock.UnlockCursor();
                 }
             }
         }
 
-        public static System.Drawing.Point GetMousePosition()
+        private void GlobalHookDragStarted(object sender, MouseEventExtArgs e)
         {
-            Win32Point w32Mouse = new Win32Point();
-            GetCursorPos(ref w32Mouse);
-
-            return new System.Drawing.Point(w32Mouse.X, w32Mouse.Y);
+            Trace.WriteLine(CursorLock.TraceCounter + ") DragStarted");
+            //foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(e))
+            //{
+            //    string name = descriptor.Name;
+            //    object value = descriptor.GetValue(e);
+            //    Trace.WriteLine($"{name}={value}");
+            //}
+            CursorLock.Locked = false;
         }
+
+        //private void GlobalHookMouseUp(object sender, MouseEventExtArgs e)
+        //{
+        //    Trace.WriteLine("MouseUp");
+        //    foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(e))
+        //    {
+        //        string name = descriptor.Name;
+        //        object value = descriptor.GetValue(e);
+        //        Trace.WriteLine($"{name}={value}");
+        //    }
+        //    CursorLock.UnlockCursor();
+        //}
 
         private void ActivatedSwitch_Toggled(object sender, RoutedEventArgs e)
         {
@@ -77,6 +75,8 @@ namespace LockCursorInMonitor
 
                 m_GlobalHook.KeyDown += GlobalHookKeyDown;
                 m_GlobalHook.KeyUp += GlobalHookKeyUp;
+                m_GlobalHook.MouseDragStartedExt += GlobalHookDragStarted;
+                //m_GlobalHook.MouseUpExt += GlobalHookMouseUp;
             }
             else
             {

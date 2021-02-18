@@ -5,8 +5,9 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x86</Platforms>
-    <StartupObject></StartupObject>
+    <StartupObject>LockCursorInMonitor.App</StartupObject>
     <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationIcon>assets\LockCursorInMonitor.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
