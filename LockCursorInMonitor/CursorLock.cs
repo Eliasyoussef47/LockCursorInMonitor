@@ -38,7 +38,12 @@ namespace LockCursorInMonitor
                 locked = value; 
             } 
         }
-
+        /// <summary>
+        /// Wether the ctrl key is pressed or not. This gets set by the event handlers GlobalHookCtrlDown and 
+        /// GlobalHookCtrlUp. This is done because I'm not aware of any other way to check if ctrl is pressed in the 
+        /// mouse event handlers.
+        /// </summary>
+        public static bool ControlKeyPressed { get; set; }
 
         public static void LockCursor()
         {
