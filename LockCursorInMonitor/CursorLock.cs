@@ -24,7 +24,6 @@ namespace LockCursorInMonitor
         static extern bool ClipCursor(RECT rcClip);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool GetClipCursor(ref RECT lprect);
 
         private static RECT rect = new RECT();
@@ -47,10 +46,20 @@ namespace LockCursorInMonitor
 
         public static void LockCursor()
         {
+            // Get the position of the cursor
             System.Drawing.Point MousePoint = GetMousePosition();
+            // Get the bounds of the screen that the cursor is on
             RECT bounds = Screen.GetWorkingArea(MousePoint);
+            // Confine the cursor to that monitor
             ClipCursor(bounds);
             Locked = true;
+            // Write the current value of rect.Right to the console
+            Trace.WriteLine("rect.Right:");
+            Trace.WriteLine(rect.Right);
+            // This throws System.NullReferenceException: 'Object reference not set to an instance of an object.'
+            bool getClip = GetClipCursor(ref rect);
+            Trace.WriteLine("rect.Right:");
+            Trace.WriteLine(rect.Right);
         }
 
         public static void UnlockCursor()

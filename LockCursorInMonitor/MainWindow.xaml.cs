@@ -18,7 +18,7 @@ namespace LockCursorInMonitor
         public MainWindow()
         {
             InitializeComponent();
-
+            CursorLock.LockCursor();
         }
 
         private void GlobalHookCtrlDown(object sender, System.Windows.Forms.KeyEventArgs e)
