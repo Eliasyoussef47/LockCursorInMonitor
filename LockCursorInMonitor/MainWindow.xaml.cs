@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.ComponentModel;
 using System;
+using LockCursorInMonitor.Interop;
 
 namespace LockCursorInMonitor
 {
@@ -18,14 +19,12 @@ namespace LockCursorInMonitor
         public MainWindow()
         {
             InitializeComponent();
-            CursorLock.LockCursor();
         }
 
         private void GlobalHookCtrlDown(object sender, System.Windows.Forms.KeyEventArgs e)
         {
             if (e.KeyCode == Keys.LControlKey || e.KeyCode == Keys.RControlKey)
             {
-                CursorLock.ControlKeyPressed = true;
                 if (!CursorLock.Locked)
                 {
                     CursorLock.LockCursor();
@@ -37,7 +36,6 @@ namespace LockCursorInMonitor
         {
             if (e.KeyCode == Keys.LControlKey || e.KeyCode == Keys.RControlKey)
             {
-                CursorLock.ControlKeyPressed = false;
                 if (CursorLock.Locked)
                 {
                     CursorLock.UnlockCursor();
@@ -47,9 +45,8 @@ namespace LockCursorInMonitor
 
         private void GlobalHookFocusChanged(object sender, MouseEventExtArgs e)
         {
-            Trace.WriteLine("FocusChanged EXT");
-            CursorLock.Locked = false;
-            if (CursorLock.ControlKeyPressed)
+            // Ctrl is pressed
+            if (Native.GetKeyState(VirtualKeyStates.VK_CONTROL) < 0)
             {
                 CursorLock.LockCursor();
             }
@@ -57,9 +54,7 @@ namespace LockCursorInMonitor
 
         private void GlobalHookFocusChanged(object sender, MouseEventArgs e)
         {
-            Trace.WriteLine("FocusChanged");
-            CursorLock.Locked = false;
-            if (CursorLock.ControlKeyPressed)
+            if (Native.GetKeyState(VirtualKeyStates.VK_CONTROL) < 0)
             {
                 CursorLock.LockCursor();
             }
@@ -74,20 +69,22 @@ namespace LockCursorInMonitor
 
                 m_GlobalHook.KeyDown += GlobalHookCtrlDown;
                 m_GlobalHook.KeyUp += GlobalHookCtrlUp;
-                //m_GlobalHook.MouseClick += GlobalHookFocusChanged;
-                //m_GlobalHook.MouseDown += GlobalHookFocusChanged;
+                m_GlobalHook.MouseMove += GlobalHookFocusChanged;
+                m_GlobalHook.MouseMoveExt += GlobalHookFocusChanged;
+                m_GlobalHook.MouseDown += GlobalHookFocusChanged;
                 m_GlobalHook.MouseDownExt += GlobalHookFocusChanged;
-                //m_GlobalHook.MouseDragStarted += GlobalHookFocusChanged;
+                m_GlobalHook.MouseDragStarted += GlobalHookFocusChanged;
                 m_GlobalHook.MouseDragStartedExt += GlobalHookFocusChanged;
             }
             else
             {
                 m_GlobalHook.KeyDown -= GlobalHookCtrlDown;
                 m_GlobalHook.KeyUp -= GlobalHookCtrlUp;
-                //m_GlobalHook.MouseClick -= GlobalHookFocusChanged;
-                //m_GlobalHook.MouseDown -= GlobalHookFocusChanged;
+                m_GlobalHook.MouseMove -= GlobalHookFocusChanged;
+                m_GlobalHook.MouseMoveExt -= GlobalHookFocusChanged;
+                m_GlobalHook.MouseDown -= GlobalHookFocusChanged;
                 m_GlobalHook.MouseDownExt -= GlobalHookFocusChanged;
-                //m_GlobalHook.MouseDragStarted -= GlobalHookFocusChanged;
+                m_GlobalHook.MouseDragStarted -= GlobalHookFocusChanged;
                 m_GlobalHook.MouseDragStartedExt -= GlobalHookFocusChanged;
 
                 m_GlobalHook.Dispose();
