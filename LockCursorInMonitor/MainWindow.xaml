@@ -8,8 +8,8 @@
         xmlns:ui="http://schemas.modernwpf.com/2019"
         ui:WindowHelper.UseModernWindowStyle="True"
         Title="LockCursorInMonitor" Height="230" Width="470"
-        x:Name="windowf"
-        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+        x:Name="CursorLockingWindow"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}" Loaded="CursorLockingWindow_Loaded" WindowStartupLocation="CenterScreen" Icon="/assets/LockCursorInMonitor.ico">
     <ui:SimpleStackPanel Margin="24, 14, 24, 24">
         <TextBlock x:Name="MyTitle" Text="Cursor Locking" Style="{DynamicResource HeaderTextBlockStyle}" Margin="0,0,0,5"></TextBlock>
         <ui:ToggleSwitch x:Name="ActivatedSwitch" Header="Activated" Width="154" Toggled="ActivatedSwitch_Toggled"/>
