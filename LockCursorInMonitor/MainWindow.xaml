@@ -7,12 +7,18 @@
         mc:Ignorable="d"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         ui:WindowHelper.UseModernWindowStyle="True"
-        Title="LockCursorInMonitor" Height="230" Width="470"
+        Title="LockCursorInMonitor" Height="309" Width="470"
         x:Name="CursorLockingWindow"
-        DataContext="{Binding RelativeSource={RelativeSource Self}}" Loaded="CursorLockingWindow_Loaded" WindowStartupLocation="CenterScreen" Icon="/assets/LockCursorInMonitor.ico">
-    <ui:SimpleStackPanel Margin="24, 14, 24, 24">
-        <TextBlock x:Name="MyTitle" Text="Cursor Locking" Style="{DynamicResource HeaderTextBlockStyle}" Margin="0,0,0,5"></TextBlock>
-        <ui:ToggleSwitch x:Name="ActivatedSwitch" Header="Activated" Width="154" Toggled="ActivatedSwitch_Toggled"/>
-        <TextBlock Text="Press and hold the Ctrl key to lock the cursor on the monitor it currently is." Style="{DynamicResource CaptionTextBlockStyle}" Foreground="#FF8E8E8E"></TextBlock>
+        DataContext="{Binding RelativeSource={RelativeSource Self}}" Loaded="CursorLockingWindow_Loaded" WindowStartupLocation="CenterScreen" Icon="/assets/LockCursorInMonitor.ico" SizeToContent="Height" Initialized="CursorLockingWindow_Initialized">
+    <ui:SimpleStackPanel Margin="24,14,24,24">
+        <TextBlock x:Name="MyTitle" Text="Cursor Locking" Style="{DynamicResource HeaderTextBlockStyle}" Margin="0,0,0,24"></TextBlock>
+        <ui:SimpleStackPanel Margin="0,0,0,24">
+            <ui:ToggleSwitch x:Name="ActivatedSwitch" Header="Activated" Width="154" Toggled="ActivatedSwitch_Toggled"/>
+            <TextBlock Text="Press and hold the Ctrl key to lock the cursor on the monitor it currently is." Style="{DynamicResource CaptionTextBlockStyle}" Foreground="#FF8E8E8E"></TextBlock>
+        </ui:SimpleStackPanel>
+        <ui:SimpleStackPanel>
+            <ui:ToggleSwitch x:Name="RunAtStartupSwitch" Header="Run at startup" Width="154" Toggled="RunAtStartupSwitch_Toggled"/>
+            <TextBlock Text="Whether or not to run LockCursorInMonitor at startup." Style="{DynamicResource CaptionTextBlockStyle}" Foreground="#FF8E8E8E"></TextBlock>
+        </ui:SimpleStackPanel>        
     </ui:SimpleStackPanel>
 </Window>

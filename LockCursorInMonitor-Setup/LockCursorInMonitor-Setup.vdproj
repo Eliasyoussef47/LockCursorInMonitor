@@ -82,6 +82,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
             }
         }
     }
@@ -190,23 +198,23 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:LockCursorInMonitor"
-        "ProductCode" = "8:{02743B9A-F5E4-478F-AF10-D088CA2BACB5}"
-        "PackageCode" = "8:{AC6264F5-9F6C-4A1D-AFA0-8A22416D3EBB}"
+        "ProductCode" = "8:{2343CEDB-1AD3-46C1-9143-D0F40F1F9B89}"
+        "PackageCode" = "8:{154C40A3-DE73-4B6E-8270-B5B92CE649EA}"
         "UpgradeCode" = "8:{E256B94A-F1CF-45D4-82B2-08AB1F2D4A97}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:1.2.0"
         "Manufacturer" = "8:Elias Youssef"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://github.com/Eliasyoussef47"
         "Title" = "8:LockCursorInMonitor"
-        "Subject" = "8:Lock Cursor In Monitor"
+        "Subject" = "8:LockCursorInMonitor"
         "ARPCONTACT" = "8:Elias Youssef"
-        "Keywords" = "8:"
-        "ARPCOMMENTS" = "8:Locks the cursor in the monitor it's on at the request of the user."
+        "Keywords" = "8:Lock, Cursor"
+        "ARPCOMMENTS" = "8:Allows the user to confine the cursor to one monitor when they hold the ctrl key."
         "ARPURLINFOABOUT" = "8:https://github.com/Eliasyoussef47"
         "ARPPRODUCTICON" = "8:_086793AADCE84AA5B5570D719299D390"
         "ARPIconIndex" = "3:0"

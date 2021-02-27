@@ -16,7 +16,8 @@ namespace LockCursorInMonitor
     /// </summary>
     public partial class App : Application
     {
-        private readonly Forms.NotifyIcon notifyIcon;
+        public readonly Forms.NotifyIcon notifyIcon;
+        public Forms.ToolStripMenuItem activatedMenuItem;
 
         public App()
         {
@@ -38,12 +39,12 @@ namespace LockCursorInMonitor
             notifyIcon.DoubleClick += NotifyIcon_DoubleClick;
             notifyIcon.ContextMenuStrip = new Forms.ContextMenuStrip();
             // Activate toggle button.
-            Forms.ToolStripMenuItem activatedMenuItem = new Forms.ToolStripMenuItem("Activated");
+            activatedMenuItem = new Forms.ToolStripMenuItem("Activated");
             activatedMenuItem.CheckOnClick = true;
             activatedMenuItem.CheckedChanged  += new EventHandler(activatedMenuItem_CheckedChanged);
             notifyIcon.ContextMenuStrip.Items.Add(activatedMenuItem);
             // Close app button.
-            Forms.ToolStripMenuItem closeAppMenuItem = new Forms.ToolStripMenuItem("Close app");
+            Forms.ToolStripMenuItem closeAppMenuItem = new Forms.ToolStripMenuItem("Exit");
             closeAppMenuItem.Click += CloseAppMenuItem_Click;
             notifyIcon.ContextMenuStrip.Items.Add(closeAppMenuItem);
             notifyIcon.Visible = true;

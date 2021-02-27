@@ -7,6 +7,7 @@ using System.IO;
 using System.Reflection;
 using System;
 using System.ComponentModel;
+using Microsoft.Win32;
 
 namespace LockCursorInMonitor
 {
@@ -24,7 +25,7 @@ namespace LockCursorInMonitor
 
         private void CursorLockingWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            ApplyConfigurations();
+            //ApplyConfigurations();
         }
 
         /// <summary>
@@ -34,6 +35,19 @@ namespace LockCursorInMonitor
         {
             AppConfigs appConfigs = Configs.ConfigsTools.GetConfigs<AppConfigs>();
             ActivatedSwitch.IsOn = appConfigs.Activated;
+            App app = (App)Application.Current;
+            app.activatedMenuItem.Checked = ActivatedSwitch.IsOn;
+            string appname = Assembly.GetEntryAssembly().GetName().Name;
+            using (RegistryKey rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true)) {
+                string rkValue = (string)rk.GetValue(appname, "");
+                if (rkValue != "")
+                {
+                    RunAtStartupSwitch.IsOn = true;
+                } else
+                {
+                    RunAtStartupSwitch.IsOn = false;
+                }
+            }
         }
 
         private void GlobalHookCtrlDown(object sender, System.Windows.Forms.KeyEventArgs e)
@@ -78,6 +92,7 @@ namespace LockCursorInMonitor
         private void ActivatedSwitch_Toggled(object sender, RoutedEventArgs e)
         {
             AppConfigs appConfigs = Configs.ConfigsTools.GetConfigs<AppConfigs>();
+            App app = (App)Application.Current;
             ModernWpf.Controls.ToggleSwitch activatedSwitch = (ModernWpf.Controls.ToggleSwitch)sender;
             if (activatedSwitch.IsOn)
             {
@@ -91,8 +106,6 @@ namespace LockCursorInMonitor
                 m_GlobalHook.MouseDownExt += GlobalHookFocusChanged;
                 m_GlobalHook.MouseDragStarted += GlobalHookFocusChanged;
                 m_GlobalHook.MouseDragStartedExt += GlobalHookFocusChanged;
-
-                appConfigs.Activated = true;
             }
             else
             {
@@ -106,9 +119,9 @@ namespace LockCursorInMonitor
                 m_GlobalHook.MouseDragStartedExt -= GlobalHookFocusChanged;
 
                 m_GlobalHook.Dispose();
-
-                appConfigs.Activated = false;
             }
+            appConfigs.Activated = activatedSwitch.IsOn;
+            app.activatedMenuItem.Checked = activatedSwitch.IsOn;
             appConfigs.Save();
         }
 
@@ -119,6 +132,60 @@ namespace LockCursorInMonitor
             this.Hide();
 
             base.OnClosing(e);
+        }
+
+        private void RunAtStartupSwitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            ModernWpf.Controls.ToggleSwitch runAtStartupSwitch = (ModernWpf.Controls.ToggleSwitch)sender;
+            string appname = Assembly.GetEntryAssembly().GetName().Name;
+            string executablePath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+            using (RegistryKey rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
+            {
+                if (runAtStartupSwitch.IsOn)
+                {
+                    rk.SetValue(appname, executablePath);
+                }
+                else
+                {
+                    rk.DeleteValue(appname, false);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Checks if the app runs on startup.
+        /// </summary>
+        /// <returns></returns>
+        public bool RunsAtStartup()
+        {
+            bool result = false;
+            string appname = Assembly.GetEntryAssembly().GetName().Name;
+            using (RegistryKey rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
+            {
+                string rkValue = (string)rk.GetValue(appname, "");
+                if (rkValue != "")
+                {
+                    result = true;
+                }
+                else
+                {
+                    result = false;
+                }
+            }
+            return result;
+        }
+
+        private void CursorLockingWindow_Initialized(object sender, EventArgs e)
+        {
+            ApplyConfigurations();
+
+            #region Hide at startup
+            bool runsAtStartup = RunsAtStartup();
+            if (runsAtStartup)
+            {
+                CursorLockingWindow.Visibility = Visibility.Hidden;
+            }
+            #endregion
         }
     }
 }
