@@ -1,5 +1,5 @@
 # LockCursorInMonitor
-Allows the user to confine the cursor to one monitor when they hold the ctrl key.
+Allows the user to confine the cursor to the monitor it's on when they hold the ctrl key.
 
 I made this because I like to quickly grab a window and slide it to the edge of the screen to make it take half of it. This becomes challenging when you have multiple monitors and you want to quickly dock a winow on a side of a screen that's between two monitors because your curso will cross over to the other monitor.
 
