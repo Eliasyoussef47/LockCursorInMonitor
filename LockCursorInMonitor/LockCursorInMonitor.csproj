@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Configs" Version="1.0.2" />
+    <PackageReference Include="Configs" Version="1.0.3" />
     <PackageReference Include="ModernWpfUI" Version="0.9.3" />
     <PackageReference Include="MouseKeyHook" Version="5.6.0" />
   </ItemGroup>
