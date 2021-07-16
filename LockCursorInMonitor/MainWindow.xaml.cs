@@ -1,18 +1,20 @@
-﻿using Gma.System.MouseKeyHook;
-using System.Windows;
-using Forms = System.Windows.Forms;
-using LockCursorInMonitor.Interop;
+﻿using Configs;
+using Gma.System.MouseKeyHook;
 using LockCursorInMonitor.Configurations;
-using System.IO;
-using System.Reflection;
+using LockCursorInMonitor.Interop;
+using Microsoft.Win32;
 using System;
 using System.ComponentModel;
-using Microsoft.Win32;
+using System.Diagnostics;
+using System.Reflection;
+using System.Windows;
+using System.Windows.Input;
+using Forms = System.Windows.Forms;
 
 namespace LockCursorInMonitor
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for MainWindow.xaml.
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -28,22 +30,37 @@ namespace LockCursorInMonitor
             //ApplyConfigurations();
         }
 
+        private void CursorLockingWindow_Initialized(object sender, EventArgs e)
+        {
+            ApplyConfigurations();
+
+            #region Hide at startup
+            bool runsAtStartup = RunsAtStartup();
+            if (runsAtStartup)
+            {
+                CursorLockingWindow.Visibility = Visibility.Hidden;
+            }
+            #endregion
+        }
+
         /// <summary>
         /// Applies saved settings to the UI so that the UI represents the saved settings of the user.
         /// </summary>
         public void ApplyConfigurations()
         {
-            AppConfigs appConfigs = Configs.ConfigsTools.GetConfigs<AppConfigs>();
+            AppConfigs appConfigs = ConfigsTools.GetConfigs<AppConfigs>();
             ActivatedSwitch.IsOn = appConfigs.Activated;
             App app = (App)Application.Current;
             app.activatedMenuItem.Checked = ActivatedSwitch.IsOn;
             string appname = Assembly.GetEntryAssembly().GetName().Name;
-            using (RegistryKey rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true)) {
+            using (RegistryKey rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
+            {
                 string rkValue = (string)rk.GetValue(appname, "");
                 if (rkValue != "")
                 {
                     RunAtStartupSwitch.IsOn = true;
-                } else
+                }
+                else
                 {
                     RunAtStartupSwitch.IsOn = false;
                 }
@@ -74,25 +91,34 @@ namespace LockCursorInMonitor
 
         private void GlobalHookFocusChanged(object sender, MouseEventExtArgs e)
         {
-            // Ctrl is pressed
-            if (Native.GetKeyState(VirtualKeyStates.VK_CONTROL) < 0)
+            int ctrlKeyState = Native.GetKeyState(VirtualKeyStates.VK_CONTROL);
+            // Ctrl is pressed.
+            if (!CursorLock.Locked && ctrlKeyState < 0)
             {
                 CursorLock.LockCursor();
+            }
+            // Ctrl not pressed.
+            else if (CursorLock.Locked && ctrlKeyState <= 0)
+            {
+                CursorLock.UnlockCursor();
             }
         }
 
         private void GlobalHookFocusChanged(object sender, Forms.MouseEventArgs e)
         {
-            if (Native.GetKeyState(VirtualKeyStates.VK_CONTROL) < 0)
+            int ctrlKeyState = Native.GetKeyState(VirtualKeyStates.VK_CONTROL);
+            if (!CursorLock.Locked && ctrlKeyState < 0)
             {
                 CursorLock.LockCursor();
+            }
+            else if (CursorLock.Locked && ctrlKeyState <= 0)
+            {
+                CursorLock.UnlockCursor();
             }
         }
 
         private void ActivatedSwitch_Toggled(object sender, RoutedEventArgs e)
         {
-            AppConfigs appConfigs = Configs.ConfigsTools.GetConfigs<AppConfigs>();
-            App app = (App)Application.Current;
             ModernWpf.Controls.ToggleSwitch activatedSwitch = (ModernWpf.Controls.ToggleSwitch)sender;
             if (activatedSwitch.IsOn)
             {
@@ -120,6 +146,8 @@ namespace LockCursorInMonitor
 
                 m_GlobalHook.Dispose();
             }
+            AppConfigs appConfigs = AppConfigs.GetConfigs();
+            App app = (App)Application.Current;
             appConfigs.Activated = activatedSwitch.IsOn;
             app.activatedMenuItem.Checked = activatedSwitch.IsOn;
             appConfigs.Save();
@@ -153,9 +181,9 @@ namespace LockCursorInMonitor
         }
 
         /// <summary>
-        /// Checks if the app runs on startup.
+        /// Checks if the app is registered in the registry to run on startup.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True if the app will run at startup, false otherwise.</returns>
         public bool RunsAtStartup()
         {
             bool result = false;
@@ -173,19 +201,6 @@ namespace LockCursorInMonitor
                 }
             }
             return result;
-        }
-
-        private void CursorLockingWindow_Initialized(object sender, EventArgs e)
-        {
-            ApplyConfigurations();
-
-            #region Hide at startup
-            bool runsAtStartup = RunsAtStartup();
-            if (runsAtStartup)
-            {
-                CursorLockingWindow.Visibility = Visibility.Hidden;
-            }
-            #endregion
         }
     }
 }

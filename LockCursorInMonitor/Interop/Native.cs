@@ -7,7 +7,7 @@ using System.Text;
 namespace LockCursorInMonitor.Interop
 {
     /// <summary>
-    /// 
+    /// Contains the functions that don't need wrapping and the wrapped functions.
     /// </summary>
     static class Native
     {
@@ -42,7 +42,7 @@ namespace LockCursorInMonitor.Interop
     }
 
     /// <summary>
-    /// A class that contains functions that need to be wraped
+    /// Contains the functions that need to be wrapped.
     /// </summary>
     static class NativeBase
     {

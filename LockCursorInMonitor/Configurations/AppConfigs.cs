@@ -12,5 +12,10 @@ namespace LockCursorInMonitor.Configurations
 
         [JsonProperty("activated", Required = Required.AllowNull)]
         public bool Activated { get; set; }
+
+        public static AppConfigs GetConfigs()
+        {
+            return GetConfigs<AppConfigs>();
+        }
     }
 }

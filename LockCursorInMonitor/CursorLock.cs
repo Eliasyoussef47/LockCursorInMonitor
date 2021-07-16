@@ -23,8 +23,8 @@ namespace LockCursorInMonitor
 
         public static void LockCursor()
         {
-            RECT bounds = GetCursorWorkingArea();
-            // Confine the cursor to that monitor
+            RECT bounds = GetCursorBounds();
+            // Confine the cursor to that monitor.
             Native.ClipCursor(bounds);
             Locked = true;
         }
@@ -35,12 +35,12 @@ namespace LockCursorInMonitor
             Locked = false;
         }
 
-        public static RECT GetCursorWorkingArea()
+        public static RECT GetCursorBounds()
         {
-            // Get the position of the cursor
+            // Get the position of the cursor.
             System.Drawing.Point MousePoint = Native.GetCursorPos();
-            // Get the bounds of the screen that the cursor is on
-            return Screen.GetWorkingArea(MousePoint);
+            // Get the bounds of the screen that the cursor is on.
+            return Screen.GetBounds(MousePoint);
         }
     }
 }
