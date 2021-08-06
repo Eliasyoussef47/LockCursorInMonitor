@@ -150,7 +150,7 @@
         {
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_4B7F930C463547A49921AAFD90BD61F3"
             {
-            "DefaultLocation" = "8:[ProgramFilesFolder][Manufacturer]\\[ProductName]"
+            "DefaultLocation" = "8:[ProgramFilesFolder]\\[ProductName]"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
@@ -198,15 +198,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:LockCursorInMonitor"
-        "ProductCode" = "8:{2343CEDB-1AD3-46C1-9143-D0F40F1F9B89}"
-        "PackageCode" = "8:{154C40A3-DE73-4B6E-8270-B5B92CE649EA}"
+        "ProductCode" = "8:{6D8A2970-F8BB-424E-A02B-2A0A8B768394}"
+        "PackageCode" = "8:{2D57C566-6473-41BA-9938-1EA4E8D934BF}"
         "UpgradeCode" = "8:{E256B94A-F1CF-45D4-82B2-08AB1F2D4A97}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.2.0"
+        "ProductVersion" = "8:1.3.1"
         "Manufacturer" = "8:Elias Youssef"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://github.com/Eliasyoussef47"
@@ -734,7 +734,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_E5EA2BE7C9E3414C9855C96432181527"
             {
-            "SourcePath" = "8:..\\LockCursorInMonitor\\obj\\Debug\\netcoreapp3.1\\apphost.exe"
+            "SourcePath" = "8:..\\LockCursorInMonitor\\obj\\Release\\netcoreapp3.1\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_4B7F930C463547A49921AAFD90BD61F3"

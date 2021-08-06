@@ -98,7 +98,7 @@ namespace LockCursorInMonitor
                 CursorLock.LockCursor();
             }
             // Ctrl not pressed.
-            else if (CursorLock.Locked && ctrlKeyState <= 0)
+            else if (CursorLock.Locked && ctrlKeyState >= 0)
             {
                 CursorLock.UnlockCursor();
             }
@@ -107,11 +107,13 @@ namespace LockCursorInMonitor
         private void GlobalHookFocusChanged(object sender, Forms.MouseEventArgs e)
         {
             int ctrlKeyState = Native.GetKeyState(VirtualKeyStates.VK_CONTROL);
-            if (!CursorLock.Locked && ctrlKeyState < 0)
+            // Ctrl is pressed.
+            if (ctrlKeyState < 0)
             {
                 CursorLock.LockCursor();
             }
-            else if (CursorLock.Locked && ctrlKeyState <= 0)
+            // Ctrl not pressed.
+            else if (ctrlKeyState >= 0)
             {
                 CursorLock.UnlockCursor();
             }
